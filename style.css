@@ -1,0 +1,76 @@
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  padding: 0;
+  margin: 0;
+}
+
+body {
+  background-color: black;
+}
+
+h1 {
+  color: lime;
+  font-size: 100px;
+}
+:root {
+  --eye-size: 100px;
+  /* --iris-size: calc(var(--eye-size) / 2);
+  --pupil-size: calc(var(--iris-size) / 2); */
+  --iris-size: 50%;
+  --pupil-size: 50%;
+  --gleam-size: 50%;
+}
+
+.eye,
+.eye__iris,
+.eye__pupil,
+.eye__gleam {
+  content: "";
+  border-radius: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.eye {
+  z-index: -1000;
+  position: fixed;
+  cursor: pointer;
+  width: var(--eye-size);
+  height: var(--eye-size);
+  background: whitesmoke;
+  transition: clip-path 100ms;
+  clip-path: ellipse(50% 50% at 50% 50%);
+}
+
+.eye:hover {
+  transition: clip-path 250ms;
+  clip-path: ellipse(50% 0% at 50% 50%);
+}
+
+.eye.blink {
+  transition: clip-path 50ms;
+  clip-path: ellipse(50% 0% at 50% 50%);
+}
+.eye__iris {
+  width: var(--iris-size);
+  height: var(--iris-size);
+  background: crimson;
+}
+
+.eye__pupil {
+  width: var(--pupil-size);
+  height: var(--pupil-size);
+
+  background: black;
+}
+
+.eye__gleam {
+  width: var(--gleam-size);
+  height: var(--gleam-size);
+  transform: translate(100%, 40%);
+  opacity: 20%;
+  background: white;
+}
