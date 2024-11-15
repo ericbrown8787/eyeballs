@@ -69,14 +69,31 @@ function moveEyeballs() {
   });
   requestAnimationFrame(moveEyeballs);
 }
-
-window.addEventListener("resize", (event) => {
+function refreshEyeballs(eyeCount) {
   eyeballs.forEach((eye) => {
     eye.remove();
   });
   eyeballs = null;
-  initializeEyeballs(10);
-});
+  initializeEyeballs(eyeCount);
+}
+
+// Prevent multiple eyeball refreshes during window resizing
+function debounce(func, wait) {
+  let timeout;
+  return function executedFunction(...args) {
+    const later = () => {
+      clearTimeout(timeout);
+      func(...args);
+    };
+
+    clearTimeout(timeout);
+    timeout = setTimeout(later, wait);
+  };
+}
+function handleResize() {
+  refreshEyeballs(10);
+}
+window.addEventListener("resize", debounce(handleResize, 250));
 
 initializeEyeballs(10);
 moveEyeballs();
