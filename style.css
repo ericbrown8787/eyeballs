@@ -13,6 +13,8 @@ body {
 h1 {
   color: lime;
   font-size: 100px;
+  max-width: fit-content;
+  max-height: fit-content;
 }
 :root {
   --eye-size: 100px;
@@ -45,14 +47,22 @@ h1 {
   clip-path: ellipse(50% 50% at 50% 50%);
 }
 
-.eye:hover {
+/* .eye:hover {
   transition: clip-path 250ms;
   clip-path: ellipse(50% 0% at 50% 50%);
-}
+} */
 
 .eye.blink {
   transition: clip-path 50ms;
   clip-path: ellipse(50% 0% at 50% 50%);
+}
+.eye.poked {
+  transition: clip-path 500ms, opacity 500ms, filter 250ms;
+  clip-path: ellipse(50% 0% at 50% 50%);
+  filter: hue-rotate(180deg) blur(4px);
+}
+.eye.poked {
+  opacity: 0%;
 }
 .eye__iris {
   width: var(--iris-size);

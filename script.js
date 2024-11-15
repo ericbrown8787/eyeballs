@@ -27,13 +27,32 @@ function initializeEyeballs(eyeCount) {
       eye.speedY =
         randomDirections[Math.round(Math.random())] * Math.random() * 2;
   });
+
+  eyeballs.forEach((eye) => {
+    eye.addEventListener("pointerdown", (e) => {
+      let target;
+      if (e.target.classList.contains("eye")) {
+        target = e.target;
+      } else {
+        target = e.target.offsetParent;
+      }
+      poke(target);
+    });
+  });
+}
+
+function poke(target) {
+  target.classList.add("poked");
+  target.speedX = 0;
+  target.speedY = 0;
+  setTimeout(() => target.remove(), 1000);
 }
 
 function randomBlink() {
   eyeballs.forEach((eye) => {
     eye.classList.remove("blink");
 
-    if (Math.random() > 0.9) {
+    if (Math.random() > 0.99) {
       setTimeout(() => {
         eye.classList.add("blink");
       }, 50 + Math.floor(Math.random() * 50));
@@ -69,6 +88,8 @@ function moveEyeballs() {
   });
   requestAnimationFrame(moveEyeballs);
 }
+
+// Clear and regenerate all eyeballs
 function refreshEyeballs(eyeCount) {
   eyeballs.forEach((eye) => {
     eye.remove();
@@ -97,4 +118,4 @@ window.addEventListener("resize", debounce(handleResize, 250));
 
 initializeEyeballs(10);
 moveEyeballs();
-setInterval(randomBlink, 2000);
+setInterval(randomBlink, 250);
