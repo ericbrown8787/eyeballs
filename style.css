@@ -45,13 +45,23 @@ h1 {
   background: whitesmoke;
   transition: clip-path 100ms;
   clip-path: ellipse(50% 50% at 50% 50%);
+  animation-name: fade-in;
+  animation-duration: 1000ms;
+  animation-iteration-count: 1;
+  animation-timing-function: ease-in;
 }
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
 
-/* .eye:hover {
+  to {
+    opacity: 1;
+  }
+} /* .eye:hover {
   transition: clip-path 250ms;
   clip-path: ellipse(50% 0% at 50% 50%);
 } */
-
 .eye.blink {
   transition: clip-path 50ms;
   clip-path: ellipse(50% 0% at 50% 50%);
