@@ -1,31 +1,41 @@
 const eyeTemplate = document.querySelector("#eye-template");
 const eyeballContainer = document.querySelector(".eyeball-container");
+const maxEyeballs = 10;
 let eyeballs;
+
+function instantiateEyeball() {
+  const clone = eyeTemplate.content.cloneNode(true);
+  eyeballContainer.appendChild(clone);
+}
+
+function randomizeEyeValues(eye) {
+  const randomDirections = [-1, 1];
+  // Set initial size
+  const size = `${35 + Math.floor(Math.random() * 75)}px`;
+  eye.style.width = size;
+  eye.style.height = size;
+
+  // Set initial position
+  eye.style.top = `${Math.floor(Math.random() * 85)}%`;
+  eye.style.left = `${Math.floor(Math.random() * 85)}%`;
+
+  // Set initial speed
+  if (!eye.speedX)
+    eye.speedX =
+      randomDirections[Math.round(Math.random())] * Math.random() * 2;
+  if (!eye.speedY)
+    eye.speedY =
+      randomDirections[Math.round(Math.random())] * Math.random() * 2;
+}
 
 function initializeEyeballs(eyeCount) {
   for (let i = 0; i < eyeCount; i += 1) {
-    const clone = eyeTemplate.content.cloneNode(true);
-    eyeballContainer.appendChild(clone);
+    instantiateEyeball();
   }
   eyeballs = document.querySelectorAll(".eye");
-  const randomDirections = [-1, 1];
+
   eyeballs.forEach((eye) => {
-    // Set initial size
-    const size = `${35 + Math.floor(Math.random() * 75)}px`;
-    eye.style.width = size;
-    eye.style.height = size;
-
-    // Set initial position
-    eye.style.top = `${Math.floor(Math.random() * 85)}%`;
-    eye.style.left = `${Math.floor(Math.random() * 85)}%`;
-
-    // Set initial speed
-    if (!eye.speedX)
-      eye.speedX =
-        randomDirections[Math.round(Math.random())] * Math.random() * 2;
-    if (!eye.speedY)
-      eye.speedY =
-        randomDirections[Math.round(Math.random())] * Math.random() * 2;
+    randomizeEyeValues(eye);
   });
 
   eyeballs.forEach((eye) => {
@@ -112,10 +122,10 @@ function debounce(func, wait) {
   };
 }
 function handleResize() {
-  refreshEyeballs(10);
+  refreshEyeballs(maxEyeballs);
 }
 window.addEventListener("resize", debounce(handleResize, 250));
 
-initializeEyeballs(10);
+initializeEyeballs(maxEyeballs);
 moveEyeballs();
 setInterval(randomBlink, 250);
