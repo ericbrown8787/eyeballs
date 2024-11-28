@@ -1,11 +1,13 @@
-const eyeTemplate = document.querySelector("#eye-template");
 const eyeballContainer = document.querySelector(".eyeball-container");
 const maxEyeballs = 10;
 let eyeballs;
 
 function instantiateEyeball() {
+  const eyeTemplate = document.querySelector("#eye-template");
   const clone = eyeTemplate.content.cloneNode(true);
   eyeballContainer.appendChild(clone);
+  eyeballs = document.querySelectorAll(".eye");
+  return eyeballs[eyeballs.length - 1];
 }
 
 function randomizeEyeValues(eye) {
@@ -26,28 +28,24 @@ function randomizeEyeValues(eye) {
   if (!eye.speedY)
     eye.speedY =
       randomDirections[Math.round(Math.random())] * Math.random() * 2;
+  eye.addEventListener("pointerdown", (e) => {
+    let target;
+    if (e.target.classList.contains("eye")) {
+      target = e.target;
+    } else {
+      target = e.target.offsetParent;
+    }
+    poke(target);
+  });
 }
 
 function initializeEyeballs(eyeCount) {
   for (let i = 0; i < eyeCount; i += 1) {
     instantiateEyeball();
   }
-  eyeballs = document.querySelectorAll(".eye");
 
   eyeballs.forEach((eye) => {
     randomizeEyeValues(eye);
-  });
-
-  eyeballs.forEach((eye) => {
-    eye.addEventListener("pointerdown", (e) => {
-      let target;
-      if (e.target.classList.contains("eye")) {
-        target = e.target;
-      } else {
-        target = e.target.offsetParent;
-      }
-      poke(target);
-    });
   });
 }
 
@@ -55,7 +53,10 @@ function poke(target) {
   target.classList.add("poked");
   target.speedX = 0;
   target.speedY = 0;
-  setTimeout(() => target.remove(), 1000);
+  setTimeout(() => {
+    target.remove();
+    eyeballs = document.querySelectorAll(".eye");
+  }, 1000);
 }
 
 function randomBlink() {
@@ -108,6 +109,13 @@ function refreshEyeballs(eyeCount) {
   initializeEyeballs(eyeCount);
 }
 
+function respawnEyeball() {
+  if (eyeballs.length < maxEyeballs) {
+    console.log("ding");
+    const newEyeball = instantiateEyeball();
+    randomizeEyeValues(newEyeball);
+  }
+}
 // Prevent multiple eyeball refreshes during window resizing
 function debounce(func, wait) {
   let timeout;
@@ -129,3 +137,4 @@ window.addEventListener("resize", debounce(handleResize, 250));
 initializeEyeballs(maxEyeballs);
 moveEyeballs();
 setInterval(randomBlink, 250);
+setInterval(respawnEyeball, 5000);
